@@ -6,6 +6,11 @@ import java.awt.event.*;
 import javax.swing.*;
 
 public class Registration extends JFrame {
+
+    private JTextField userFld;
+    private JPasswordField passFld;
+    private JLabel infoLbl;
+
     public Registration(String title) {
         super(title);
         setSize(500, 500);
@@ -28,7 +33,7 @@ public class Registration extends JFrame {
         JLabel userLbl = new JLabel("Username:");
         headerLbl.setAlignmentX(Component.CENTER_ALIGNMENT);
         headerLbl.setFont(new Font("Arial", Font.PLAIN, 30));
-        JTextField userFld = new JTextField("Username");
+        userFld = new JTextField();
         userFld.setMaximumSize(new Dimension(200, 30));
 
         //Password panel
@@ -38,10 +43,13 @@ public class Registration extends JFrame {
         JLabel passLbl = new JLabel("Password:");
         headerLbl.setAlignmentX(Component.CENTER_ALIGNMENT);
         headerLbl.setFont(new Font("Arial", Font.PLAIN, 30));
-        JPasswordField passFld = new JPasswordField("Password");
+        passFld = new JPasswordField();
         passFld.setMaximumSize(new Dimension(200, 30));
 
-        //Registration button
+        //Info label
+        infoLbl = new JLabel("Label");
+
+        //Submit button
         JButton submitBtn = new JButton("Submit");
         submitBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
         submitBtn.addActionListener(e -> submitBtnPressed());
@@ -64,6 +72,9 @@ public class Registration extends JFrame {
         panel.add(passPnl);
 
         panel.add(Box.createVerticalStrut(20));
+        panel.add(infoLbl);
+
+        panel.add(Box.createVerticalStrut(30));
         panel.add(submitBtn);
         panel.add(Box.createVerticalStrut(20));
 
@@ -71,7 +82,27 @@ public class Registration extends JFrame {
     }
 
     public void submitBtnPressed() {
+        if (isValidUsername(userFld.getText()) && isValidPassword(new String(passFld.getPassword()))) {
+            infoLbl.setText("Valid");
+        }
+        else {
+            infoLbl.setText("Invalid");
+        }
         //TODO: Check db for username
         //if not there add to db
+    }
+
+    public boolean isValidUsername(String username) {
+        if (username.length() < 5 || username.matches(".*[&=_'+,<>].*")) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean isValidPassword(String password) {
+        if (password.length() < 5 || password.matches(".*[&=_'+,<>].*")) {
+            return false;
+        }
+        return true;
     }
 }
