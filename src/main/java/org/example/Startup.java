@@ -35,12 +35,12 @@ public class Startup extends JFrame{
     }
 
     public void regBtnPressed() {
-        Registration registration = new Registration("User registration");
+        Registration registration = new Registration();
         this.dispose();
     }
 
     public void loginBtnPressed() {
-        Registration registration = new Registration("User registration"); //Change to login
+        Login registration = new Login();
         this.dispose();
     }
 }

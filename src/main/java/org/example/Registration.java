@@ -1,6 +1,5 @@
 package org.example;
 
-
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -11,8 +10,8 @@ public class Registration extends JFrame {
     private JPasswordField passFld;
     private JLabel infoLbl;
 
-    public Registration(String title) {
-        super(title);
+    public Registration() {
+        super("User Registration");
         setSize(500, 500);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -35,6 +34,9 @@ public class Registration extends JFrame {
         headerLbl.setFont(new Font("Arial", Font.PLAIN, 30));
         userFld = new JTextField();
         userFld.setMaximumSize(new Dimension(200, 30));
+        userPnl.add(userLbl);
+        userPnl.add(Box.createHorizontalStrut(20));
+        userPnl.add(userFld);
 
         //Password panel
         JPanel passPnl = new JPanel();
@@ -45,6 +47,9 @@ public class Registration extends JFrame {
         headerLbl.setFont(new Font("Arial", Font.PLAIN, 30));
         passFld = new JPasswordField();
         passFld.setMaximumSize(new Dimension(200, 30));
+        passPnl.add(passLbl);
+        passPnl.add(Box.createHorizontalStrut(20));
+        passPnl.add(passFld);
 
         //Info label
         infoLbl = new JLabel("Label");
@@ -59,22 +64,15 @@ public class Registration extends JFrame {
         panel.add(headerLbl);
         panel.add(Box.createVerticalStrut(50));
 
-        userPnl.add(userLbl);
-        userPnl.add(Box.createHorizontalStrut(20));
-        userPnl.add(userFld);
         panel.add(userPnl);
-
         panel.add(Box.createVerticalStrut(25));
 
-        passPnl.add(passLbl);
-        passPnl.add(Box.createHorizontalStrut(20));
-        passPnl.add(passFld);
         panel.add(passPnl);
-
         panel.add(Box.createVerticalStrut(20));
-        panel.add(infoLbl);
 
+        panel.add(infoLbl);
         panel.add(Box.createVerticalStrut(30));
+
         panel.add(submitBtn);
         panel.add(Box.createVerticalStrut(20));
 
@@ -82,14 +80,21 @@ public class Registration extends JFrame {
     }
 
     public void submitBtnPressed() {
-        if (isValidUsername(userFld.getText()) && isValidPassword(new String(passFld.getPassword()))) {
+        String user = userFld.getText();
+        String pass = new String(passFld.getPassword());
+        if (isValidUsername(user) && isValidPassword(pass)) {
             infoLbl.setText("Valid");
+            validRegistration();
         }
         else {
             infoLbl.setText("Invalid");
         }
         //TODO: Check db for username
         //if not there add to db
+    }
+
+    public void validRegistration() {
+        Chat chat = new Chat();
     }
 
     public boolean isValidUsername(String username) {
