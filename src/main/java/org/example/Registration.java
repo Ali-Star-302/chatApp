@@ -12,6 +12,10 @@ public class Registration extends JFrame {
 
     public Registration() {
         super("User Registration");
+        initComponents();
+    }
+
+    public void initComponents() {
         setSize(500, 500);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -63,16 +67,12 @@ public class Registration extends JFrame {
         panel.add(Box.createVerticalStrut(15));
         panel.add(headerLbl);
         panel.add(Box.createVerticalStrut(50));
-
         panel.add(userPnl);
         panel.add(Box.createVerticalStrut(25));
-
         panel.add(passPnl);
         panel.add(Box.createVerticalStrut(20));
-
         panel.add(infoLbl);
         panel.add(Box.createVerticalStrut(30));
-
         panel.add(submitBtn);
         panel.add(Box.createVerticalStrut(20));
 
@@ -95,6 +95,7 @@ public class Registration extends JFrame {
 
     public void validRegistration() {
         Chat chat = new Chat();
+        this.dispose();
     }
 
     public boolean isValidUsername(String username) {

@@ -6,6 +6,10 @@ import java.awt.*;
 public class Startup extends JFrame{
     public Startup(String title) {
         super(title);
+        initComponents();
+    }
+
+    public void initComponents() {
         setSize(500, 500);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -33,6 +37,7 @@ public class Startup extends JFrame{
 
         setVisible(true);
     }
+
 
     public void regBtnPressed() {
         Registration registration = new Registration();

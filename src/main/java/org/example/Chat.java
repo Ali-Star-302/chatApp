@@ -5,13 +5,15 @@ import java.awt.event.*;
 import javax.swing.*;
 
 public class Chat extends JFrame{
+    public int windowWidth = 650;
+
     public Chat() {
         super("Chat Client");
         initComponents();
     }
 
     public void initComponents() {
-        setSize(500, 700);
+        setSize(windowWidth, 700);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         JPanel panel = new JPanel();
@@ -32,7 +34,7 @@ public class Chat extends JFrame{
         JPanel chatPanel = new JPanel();
         chatPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         chatPanel.setLayout(new BoxLayout(chatPanel, BoxLayout.Y_AXIS));
-        chatPanel.setMaximumSize(new Dimension(450, 400));
+        chatPanel.setMaximumSize(new Dimension(windowWidth-50, 400));
         JTextArea chatBox = new JTextArea();
         chatBox.setSize(50,100);
         JScrollPane chatScrollPane = new JScrollPane();
@@ -43,7 +45,7 @@ public class Chat extends JFrame{
         JPanel sendPanel = new JPanel();
         sendPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         sendPanel.setLayout(new BoxLayout(sendPanel, BoxLayout.X_AXIS));
-        sendPanel.setMaximumSize(new Dimension(450, 75));
+        sendPanel.setMaximumSize(new Dimension(windowWidth-50, 75));
         JTextArea sendField = new JTextArea();
         sendField.setToolTipText("Type your message here...");
         sendField.setEditable(true);
@@ -51,6 +53,7 @@ public class Chat extends JFrame{
         sendScrollPane.setViewportView(sendField);
         sendPanel.add(sendScrollPane);
 
+        //Send button
         JPanel sendBtnPanel = new JPanel();
         sendBtnPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         sendBtnPanel.setLayout(new BoxLayout(sendBtnPanel, BoxLayout.X_AXIS));
@@ -60,17 +63,15 @@ public class Chat extends JFrame{
         sendBtn.setText("Send");
         sendBtnPanel.add(sendBtn);
 
+        //Adding to panel
         panel.add(Box.createVerticalStrut(15));
         panel.add(headerLbl);
         panel.add(Box.createVerticalStrut(15));
-
         panel.add(conLabel);
         panel.add(chatPanel);
-        panel.add(Box.createVerticalStrut(15));
-
+        panel.add(Box.createVerticalStrut(20));
         panel.add(sendPanel);
-        panel.add(Box.createVerticalStrut(15));
-
+        panel.add(Box.createVerticalStrut(5));
         panel.add(sendBtnPanel);
 
         setVisible(true);
