@@ -9,6 +9,9 @@ public class Login extends JFrame{
     private JPasswordField passFld;
     private JLabel infoLbl;
 
+    private String username;
+    private String password;
+
     public Login() {
         super("Login");
         initComponents();
@@ -79,8 +82,8 @@ public class Login extends JFrame{
     }
 
     public void submitBtnPressed() {
-        String user = userFld.getText();
-        String pass = new String(passFld.getPassword());
+        username = userFld.getText();
+        password = new String(passFld.getPassword());
         if (true) {
             infoLbl.setText("Valid");
             validLogin();
@@ -93,7 +96,7 @@ public class Login extends JFrame{
     }
 
     public void validLogin() {
-        Chat chat = new Chat();
+        Chat chat = new Chat(username);
         this.dispose();
     }
 }

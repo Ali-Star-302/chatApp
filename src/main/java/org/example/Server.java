@@ -12,6 +12,7 @@ public class Server {
     }
 
     public void startServer() {
+        System.out.println("Running...");
         try {
             while (!serverSocket.isClosed()) {
                 Socket socket = serverSocket.accept();

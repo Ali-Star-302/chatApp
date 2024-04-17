@@ -10,6 +10,21 @@ public class Registration extends JFrame {
     private JPasswordField passFld;
     private JLabel infoLbl;
 
+    private String username;
+    private String password;
+
+    private enum UsernameErrors {
+        InvalidLength,
+        InvalidCharacters,
+        ValidUser
+    }
+
+    private enum PasswordErrors {
+        InvalidLength,
+        InvalidCharacters,
+        ValidPass
+    }
+
     public Registration() {
         super("User Registration");
         initComponents();
@@ -56,7 +71,9 @@ public class Registration extends JFrame {
         passPnl.add(passFld);
 
         //Info label
-        infoLbl = new JLabel("Label");
+        infoLbl = new JLabel("");
+        infoLbl.setAlignmentX(Component.CENTER_ALIGNMENT);
+        infoLbl.setForeground(Color.red);
 
         //Submit button
         JButton submitBtn = new JButton("Submit");
@@ -80,35 +97,49 @@ public class Registration extends JFrame {
     }
 
     public void submitBtnPressed() {
-        String user = userFld.getText();
-        String pass = new String(passFld.getPassword());
-        if (isValidUsername(user) && isValidPassword(pass)) {
-            infoLbl.setText("Valid");
-            validRegistration();
+        username = userFld.getText();
+        password = new String(passFld.getPassword());
+        String userResult = isValidUsername(username);
+        String passResult = isValidPassword(password);
+
+        if (!userResult.equals("Valid")){
+            infoLbl.setText("Invalid username: " + userResult);
+        }
+        else if (!passResult.equals("Valid")){
+            infoLbl.setText("Invalid password: " + passResult);
         }
         else {
-            infoLbl.setText("Invalid");
+            infoLbl.setText("Valid");
+            validRegistration();
         }
         //TODO: Check db for username
         //if not there add to db
     }
 
     public void validRegistration() {
-        Chat chat = new Chat();
+        Chat chat = new Chat(username);
         this.dispose();
     }
 
-    public boolean isValidUsername(String username) {
-        if (username.length() < 5 || username.matches(".*[&=_'+,<>].*")) {
-            return false;
+    private String isValidUsername(String username) {
+        if (username.length() < 5 ) {
+            return "length must be greater than 5";
         }
-        return true;
+        else if (username.matches(".*[&=_'+,<>].*")) {
+            return "invalid characters used";
+        }
+
+        return "Valid";
     }
 
-    public boolean isValidPassword(String password) {
-        if (password.length() < 5 || password.matches(".*[&=_'+,<>].*")) {
-            return false;
+    private String isValidPassword(String password) {
+        if (password.length() < 8 ) {
+            return "length must be greater than 8";
         }
-        return true;
+        else if (password.matches(".*[&=_'+,<>].*")) {
+            return "invalid characters used";
+        }
+
+        return "Valid";
     }
 }

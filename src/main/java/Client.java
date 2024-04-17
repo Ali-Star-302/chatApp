@@ -24,7 +24,7 @@ public class Client {
         try {
             bufferedWriter.write(username);
             bufferedWriter.newLine();
-            bufferedWriter.flush();
+            bufferedWriter.flush(); //sends the username to the server
 
             Scanner scanner = new Scanner(System.in);
             while (socket.isConnected()) {

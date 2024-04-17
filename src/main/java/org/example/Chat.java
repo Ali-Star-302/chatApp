@@ -2,14 +2,76 @@ package org.example;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
+import java.net.Socket;
 import javax.swing.*;
 
 public class Chat extends JFrame{
     public int windowWidth = 650;
 
-    public Chat() {
+    private BufferedReader bufferedReader;
+    private BufferedWriter bufferedWriter;
+    private Socket socket;
+    private String username;
+
+    private JTextArea sendField;
+    private JTextArea chatBox;
+
+    public Chat(String username) {
         super("Chat Client");
+
         initComponents();
+
+        try {
+            this.socket = new Socket("localhost", 1234);
+            this.username = username;
+            this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        }
+        catch (IOException e) {
+            closeEverything(socket, bufferedReader, bufferedWriter);
+        }
+
+        listenForMessage();
+        sendMessage();
+    }
+
+
+    public void sendMessage() {
+        try {
+            bufferedWriter.write(username);
+            bufferedWriter.newLine();
+            bufferedWriter.flush();
+
+            while (socket.isConnected()) {
+                String message = sendField.getText();
+                bufferedWriter.write(username + ": " + message);
+                bufferedWriter.newLine();
+                bufferedWriter.flush();
+            }
+        }
+        catch (IOException e) {
+            closeEverything(socket, bufferedReader, bufferedWriter);
+        }
+    }
+
+    public void listenForMessage() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String msgFromGroupChat;
+
+                while (socket.isConnected()) {
+                    try {
+                        msgFromGroupChat = bufferedReader.readLine();
+                        chatBox.setText(chatBox.getText() + msgFromGroupChat);
+                        System.out.println(msgFromGroupChat);
+                    } catch (IOException e) {
+                        closeEverything(socket, bufferedReader, bufferedWriter);
+                    }
+                }
+            }
+        }).start();
     }
 
     public void initComponents() {
@@ -35,7 +97,7 @@ public class Chat extends JFrame{
         chatPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         chatPanel.setLayout(new BoxLayout(chatPanel, BoxLayout.Y_AXIS));
         chatPanel.setMaximumSize(new Dimension(windowWidth-50, 400));
-        JTextArea chatBox = new JTextArea();
+        chatBox = new JTextArea();
         chatBox.setSize(50,100);
         JScrollPane chatScrollPane = new JScrollPane();
         chatScrollPane.setViewportView(chatBox);
@@ -46,7 +108,7 @@ public class Chat extends JFrame{
         sendPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         sendPanel.setLayout(new BoxLayout(sendPanel, BoxLayout.X_AXIS));
         sendPanel.setMaximumSize(new Dimension(windowWidth-50, 75));
-        JTextArea sendField = new JTextArea();
+        sendField = new JTextArea();
         sendField.setToolTipText("Type your message here...");
         sendField.setEditable(true);
         JScrollPane sendScrollPane = new JScrollPane();
@@ -62,6 +124,7 @@ public class Chat extends JFrame{
         sendBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
         sendBtn.setText("Send");
         sendBtnPanel.add(sendBtn);
+        sendBtn.addActionListener(e -> sendBtnPressed());
 
         //Adding to panel
         panel.add(Box.createVerticalStrut(15));
@@ -75,5 +138,26 @@ public class Chat extends JFrame{
         panel.add(sendBtnPanel);
 
         setVisible(true);
+    }
+
+    public void closeEverything(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter) {
+        try {
+            if (bufferedReader != null) {
+                bufferedReader.close();
+            }
+            if (bufferedWriter != null) {
+                bufferedWriter.close();
+            }
+            if (socket != null) {
+                socket.close();
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendBtnPressed() {
+
     }
 }
